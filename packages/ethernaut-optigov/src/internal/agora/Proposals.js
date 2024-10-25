@@ -13,7 +13,7 @@ class Proposals {
         params: { limit, offset },
       })
 
-      debug.log(`Proposals: ${response.data}`, 'ethernaut-optigov')
+      debug.log(`Proposals: ${response.data.data}`, 'ethernaut-optigov')
       return response.data.data
     } catch (error) {
       this.agora.handleError(error)
@@ -43,9 +43,8 @@ class Proposals {
           params: { limit, offset },
         },
       )
-
       debug.log(
-        `Votes for Proposal ${proposalId}: ${response.data}`,
+        `Votes for Proposal ${proposalId}: ${response.data.data}`,
         'ethernaut-optigov',
       )
       return response.data.data

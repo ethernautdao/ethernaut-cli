@@ -3,6 +3,11 @@ const output = require('ethernaut-common/src/ui/output')
 const Proposals = require('../internal/agora/Proposals')
 const Agora = require('../internal/agora/Agora')
 
+const VOTES = {
+  yes: 'yes',
+  no: 'no',
+}
+
 require('../scopes/optigov')
   .task(
     'proposals',
@@ -20,7 +25,7 @@ require('../scopes/optigov')
     0,
     types.int,
   )
-  .addOptionalParam(
+  .addParam(
     'proposalId',
     'The ID of a specific proposal to query.',
     undefined,
@@ -29,7 +34,7 @@ require('../scopes/optigov')
   .addOptionalParam(
     'votes',
     'If specified, fetch votes for the given proposalId.',
-    false,
+    VOTES.no,
     types.string,
   )
   .setAction(async ({ limit, offset, proposalId, votes }) => {
@@ -40,7 +45,7 @@ require('../scopes/optigov')
 
       // If proposalId is provided, fetch specific proposal or votes
       if (proposalId) {
-        if (votes) {
+        if (votes == VOTES.yes) {
           // Get votes for the specified proposal
           const proposalVotes = await proposals.getProposalVotes({
             proposalId,
@@ -74,7 +79,7 @@ function printProposals(proposals) {
   const strs = []
 
   for (const proposal of proposals) {
-    strs.push(` - ${proposal.title}: ${proposal.summary}`)
+    strs.push(`- Id: ${proposal.id}\n  Title: ${proposal.markdowntitle}`)
   }
 
   return strs.join('\n\n')
@@ -82,7 +87,7 @@ function printProposals(proposals) {
 
 // Utility function to print a specific proposal
 function printProposal(proposal) {
-  return `Title: ${proposal.title}\nSummary: ${proposal.summary}\nDetails: ${proposal.details}`
+  return `Id: ${proposal.id}\nTitle: ${proposal.markdowntitle}\nDescription: ${proposal.description}`
 }
 
 // Utility function to print votes for a proposal
@@ -90,7 +95,9 @@ function printVotes(votes) {
   const strs = []
 
   for (const vote of votes) {
-    strs.push(` - Voter: ${vote.voter}, Choice: ${vote.choice}`)
+    strs.push(
+      ` - Voter: ${vote.address}, Support: ${vote.support}, Weight: ${vote.weight}, Reason: ${vote.reason}`,
+    )
   }
 
   return strs.join('\n\n')
