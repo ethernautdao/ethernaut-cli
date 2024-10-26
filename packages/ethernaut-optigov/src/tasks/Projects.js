@@ -9,6 +9,18 @@ require('../scopes/optigov')
     'projects',
     'Prints a list of projects registered in RetroPGF, given specified filters',
   )
+  .addOptionalParam(
+    'limit',
+    'The maximum number of proposals to fetch. Defaults to 10.',
+    10,
+    types.int,
+  )
+  .addOptionalParam(
+    'offset',
+    'The number of proposals to skip before starting to fetch. Defaults to 0.',
+    0,
+    types.int,
+  )
   .addParam(
     'round',
     'The round number to query. Defaults to "latest". Can also be "any" to query all rounds.',
@@ -27,9 +39,9 @@ require('../scopes/optigov')
     undefined,
     types.string,
   )
-  .setAction(async ({ round, name, category }) => {
+  .setAction(async ({ limit, offset, round, name, category }) => {
     try {
-      const projects = await getProjects(round)
+      const projects = await getProjects(limit, offset, round)
 
       const filteredProjects = filterProjects(projects, name, category)
 
@@ -68,7 +80,7 @@ function printProjects(projects) {
   return strs.join('\n\n')
 }
 
-async function getProjects(round) {
+async function getProjects(limit, offset, round) {
   const agora = new Agora()
   const projects = new Projects(agora)
   const rounds = new Rounds(agora)
@@ -81,8 +93,8 @@ async function getProjects(round) {
   }
 
   if (!roundId) {
-    return await projects.getProjects()
+    return await projects.getProjects(limit, offset)
   }
 
-  return await projects.getRoundProjects({ roundId })
+  return await projects.getRoundProjects({ roundId, limit, offset })
 }
