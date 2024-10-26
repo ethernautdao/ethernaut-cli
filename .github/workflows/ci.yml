@@ -404,23 +404,24 @@ jobs:
           parallel: true
   finish:
     needs:
-      [
-        ethernaut-common,
-        ethernaut-oso,
-        ethernaut-util,
-        ethernaut-util-ui,
-        ethernaut-ui,
-        ethernaut-interact,
-        ethernaut-interact-ui,
-        ethernaut-challenges,
-        ethernaut-ai,
-        ethernaut-ai-ui,
-        ethernaut-network,
-        ethernaut-network-ui,
-        ethernaut-wallet,
-        ethernaut-wallet-ui,
-        ethernaut-cli,
-      ]
+      - lint
+      - ethernaut-common
+      - ethernaut-oso
+      - ethernaut-optigov
+      - ethernaut-util
+      - ethernaut-util-ui
+      - ethernaut-ui
+      - ethernaut-interact
+      - ethernaut-interact-ui
+      - ethernaut-challenges
+      - ethernaut-ai
+      - ethernaut-ai-ui
+      - ethernaut-network
+      - ethernaut-network-ui
+      - ethernaut-wallet
+      - ethernaut-wallet-ui
+      - ethernaut-cli
+    if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -428,3 +429,4 @@ jobs:
         with:
           github-token: ${{ secrets.COVERALLS_NEW }}
           parallel-finished: true
+          carryforward: 'lint,ethernaut-common,ethernaut-oso,ethernaut-optigov,ethernaut-util,ethernaut-util-ui,ethernaut-ui,ethernaut-interact,ethernaut-interact-ui,ethernaut-challenges,ethernaut-ai,ethernaut-ai-ui,ethernaut-network,ethernaut-network-ui,ethernaut-wallet,ethernaut-wallet-ui,ethernaut-cli'
