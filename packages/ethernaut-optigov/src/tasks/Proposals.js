@@ -25,7 +25,7 @@ require('../scopes/optigov')
     0,
     types.int,
   )
-  .addParam(
+  .addOptionalParam(
     'proposalId',
     'The ID of a specific proposal to query.',
     undefined,
