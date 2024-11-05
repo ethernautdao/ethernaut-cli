@@ -1,6 +1,7 @@
 const types = require('ethernaut-common/src/validation/types')
 const output = require('ethernaut-common/src/ui/output')
 const Projects = require('../internal/agora/Projects')
+const Rounds = require('../internal/agora/Rounds')
 const Agora = require('../internal/agora/Agora')
 
 require('../scopes/optigov')
@@ -70,11 +71,13 @@ function printProjects(projects) {
 async function getProjects(round) {
   const agora = new Agora()
   const projects = new Projects(agora)
+  const rounds = new Rounds(agora)
 
   let roundId
 
   if (round === 'latest') {
-    roundId = await projects.getLatestRound()
+    roundId = await rounds.getLatestRound()
+    console.log(`Latest round: ${roundId}`)
   }
 
   if (!roundId) {
