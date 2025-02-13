@@ -14,7 +14,7 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "copy-paste": "^1.5.3",
-    "openai": "^4.26.0"
+    "openai": "^4.87.3"
   },
   "peerDependencies": {
     "hardhat": "^2.22.2"

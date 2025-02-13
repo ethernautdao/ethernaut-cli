@@ -12,7 +12,7 @@ module.exports = function buildToolsSpec(hre) {
     tools.push({
       type: 'function',
       function: {
-        name: t.scope ? `${t.scope}.${t.name}` : t.name,
+        name: t.scope ? `${t.scope}_${t.name}` : t.name, // new regex does not allow periods
         description: t._description,
         parameters: collectParameterSpecs(t),
       },
