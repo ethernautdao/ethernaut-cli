@@ -11,7 +11,15 @@ module.exports = function openai() {
           'OpenAI-Beta': 'assistants=v2',
         },
       },
+      defaultHeaders: { 'OpenAI-Beta': 'assistants=v2' },
+      headers: { 'OpenAI-Beta': 'assistants=v2' },
     })
+    _openai.headers = { 'OpenAI-Beta': 'assistants=v2' }
+    _openai.requestOptions = {
+      headers: {
+        'OpenAI-Beta': 'assistants=v2',
+      },
+    }
   }
   return _openai
 }
