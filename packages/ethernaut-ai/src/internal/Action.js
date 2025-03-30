@@ -24,7 +24,7 @@ class Action {
   }
 
   parseTask() {
-    const nameComponents = this.function.name.split('.')
+    const nameComponents = this.function.name.split('_')
 
     if (nameComponents.length === 1) {
       this.taskName = nameComponents[0]
