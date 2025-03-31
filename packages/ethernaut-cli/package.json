@@ -1,6 +1,6 @@
 {
   "name": "ethernaut-cli",
-  "version": "1.1.12",
+  "version": "0.0.0",
   "description": "Ai agent cli with web3 capabilities",
   "license": "ISC",
   "author": "Alejandro Santander",
