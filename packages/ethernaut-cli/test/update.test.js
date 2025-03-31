@@ -2,6 +2,7 @@ const fs = require('fs')
 const storage = require('ethernaut-common/src/io/storage')
 const { Terminal, keys } = require('ethernaut-common/src/test/terminal')
 const assert = require('assert')
+const update = require('../src/update')
 
 describe('update', function () {
   let terminal = new Terminal()
@@ -37,6 +38,13 @@ describe('update', function () {
     fs.writeFileSync('package.json', cachedPkg, 'utf8')
   })
 
+  it('should skip update when autoUpdate matches update version', async function () {
+    const pkg = { version: '0.0.0' }
+    const config = { general: { autoUpdate: '1.0.0' } }
+    storage.saveConfig(config)
+    await update.checkAutoUpdate(pkg)
+  })
+
   describe('when pkg version is old', function () {
     let newConfig
 
@@ -48,6 +56,22 @@ describe('update', function () {
         JSON.stringify(newConfig, null, 2),
         'utf8',
       )
+    })
+
+    describe('when auto update matches update version', function () {
+      before('modify', async function () {
+        const config = storage.readConfig()
+        config.general = { autoUpdate: '1.0.0' } // Set to the version that will be available
+        storage.saveConfig(config)
+      })
+
+      before('start cli', async function () {
+        await triggerUpdate()
+      })
+
+      it('should not show update prompt', async function () {
+        terminal.hasNot('A new version of the ethernaut-cli is available')
+      })
     })
 
     describe('when auto update is never', function () {
@@ -129,6 +153,46 @@ describe('update', function () {
 
           it('displays installation', async function () {
             terminal.has('Installing update...')
+          })
+
+          it('hides prompts and calls install when installing update', async function () {
+            // Mock the dependencies
+            const originalHidePrompts =
+              require('ethernaut-common/src/ui/prompt').hidePrompts
+            const originalSpawn = require('child_process').spawn
+
+            let hidePromptsCalled = false
+            let spawnCalled = false
+
+            require('ethernaut-common/src/ui/prompt').hidePrompts = (value) => {
+              hidePromptsCalled = value === true
+            }
+
+            require('child_process').spawn = (cmd, args) => {
+              spawnCalled =
+                cmd === 'npm' &&
+                args[0] === 'install' &&
+                args[1] === '-g' &&
+                args[2] === 'ethernaut-cli'
+            }
+
+            // Call the update function with a mock package
+            await update.checkAutoUpdate({ version: '0.0.0' })
+
+            // Restore original functions
+            require('ethernaut-common/src/ui/prompt').hidePrompts =
+              originalHidePrompts
+            require('child_process').spawn = originalSpawn
+
+            // Verify the behavior
+            assert(
+              hidePromptsCalled,
+              'hidePrompts should have been called with true',
+            )
+            assert(
+              spawnCalled,
+              'spawn should have been called with npm install command',
+            )
           })
         })
       })
