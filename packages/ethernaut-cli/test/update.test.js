@@ -2,7 +2,7 @@ const fs = require('fs')
 const storage = require('ethernaut-common/src/io/storage')
 const { Terminal, keys } = require('ethernaut-common/src/test/terminal')
 const assert = require('assert')
-const update = require('../src/update')
+const checkAutoUpdate = require('../src/update')
 
 describe('update', function () {
   let terminal = new Terminal()
@@ -244,6 +244,55 @@ describe('update', function () {
             const config = storage.readConfig()
             assert.equal(config.general.autoUpdate, 'never')
           })
+        })
+      })
+
+      describe('when autoUpdate matches the available update version', function () {
+        let originalCheckUpdate
+        let originalConsoleLog
+        let consoleOutput = []
+
+        before('mock dependencies', function () {
+          // Guardar implementaciones originales
+          originalCheckUpdate =
+            require('ethernaut-common/src/util/update').checkUpdate
+          originalConsoleLog = console.log
+
+          // Mock checkUpdate
+          require('ethernaut-common/src/util/update').checkUpdate = () =>
+            '1.2.3'
+
+          // Mock console.log
+          console.log = (message) => consoleOutput.push(message)
+
+          // Configurar autoUpdate para que coincida
+          const config = storage.readConfig()
+          config.general = { autoUpdate: '1.2.3' }
+          storage.saveConfig(config)
+        })
+
+        after('restore original implementations', function () {
+          // Restaurar implementaciones originales
+          require('ethernaut-common/src/util/update').checkUpdate =
+            originalCheckUpdate
+          console.log = originalConsoleLog
+        })
+
+        it('should skip the update without showing notice', async function () {
+          // Resetear console output
+          consoleOutput = []
+
+          await checkAutoUpdate({ version: '1.0.0' })
+
+          // Verificar que no se mostró el aviso de actualización
+          const showedUpdateNotice = consoleOutput.some((msg) =>
+            msg.includes('is available, update with'),
+          )
+
+          assert(
+            !showedUpdateNotice,
+            'Update notice should not be shown when version is skipped',
+          )
         })
       })
     })
