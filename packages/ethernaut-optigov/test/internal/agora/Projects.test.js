@@ -19,6 +19,7 @@ describe('Projects Module', function () {
     }
     mockAgora = {
       createAxiosInstance: () => axiosInstance,
+      // For failure tests, handleError just rethrows the error.
       handleError: (error) => {
         throw error
       },
@@ -46,5 +47,35 @@ describe('Projects Module', function () {
   it('should return the latest round as 5', async function () {
     const latestRound = await projects.getLatestRound()
     assert.equal(latestRound, 5)
+  })
+
+  it('should propagate error when getProjects fails', async function () {
+    // Override axiosInstance.get to throw an error.
+    axiosInstance.get = async () => {
+      throw { message: 'projects error' }
+    }
+    mockAgora.createAxiosInstance = () => axiosInstance
+
+    try {
+      await projects.getProjects({ limit: 5, offset: 0 })
+      assert.fail('Expected error was not thrown')
+    } catch (err) {
+      assert.strictEqual(err.message, 'projects error')
+    }
+  })
+
+  it('should propagate error when getRoundProjects fails', async function () {
+    // Override axiosInstance.get to throw an error.
+    axiosInstance.get = async () => {
+      throw { message: 'round projects error' }
+    }
+    mockAgora.createAxiosInstance = () => axiosInstance
+
+    try {
+      await projects.getRoundProjects({ roundId: 1, limit: 5, offset: 0 })
+      assert.fail('Expected error was not thrown')
+    } catch (err) {
+      assert.strictEqual(err.message, 'round projects error')
+    }
   })
 })
