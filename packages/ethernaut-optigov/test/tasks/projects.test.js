@@ -81,6 +81,18 @@ describe('projects task', function () {
     )
   })
 
+  it('fetches projects for the latest round', async function () {
+    const result = await hre.run(
+      { scope: 'optigov', task: 'projects' },
+      { round: 'latest', limit: 2, offset: 0 },
+    )
+
+    assert.equal(
+      result,
+      'Projects:  - Project for Round 5: Category A: Description for round project',
+    )
+  })
+
   it('fetches projects filtered by name and category', async function () {
     const result = await hre.run(
       { scope: 'optigov', task: 'projects' },

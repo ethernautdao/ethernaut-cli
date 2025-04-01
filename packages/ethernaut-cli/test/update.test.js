@@ -126,7 +126,7 @@ describe('update', function () {
             await terminal.input(keys.ENTER, 2000)
           })
 
-          it('displays installation', async function () {
+          it('displays installation message', async function () {
             terminal.has('Installing update...')
           })
         })
