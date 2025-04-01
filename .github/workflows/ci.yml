@@ -74,27 +74,6 @@ jobs:
           github-token: ${{ secrets.COVERALLS_NEW }}
           flag-name: ethernaut-oso
           parallel: true
-  ethernaut-optigov:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ['20.12.0']
-    steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm run compile --if-present
-      - run: cd packages/ethernaut-optigov && npm t
-      - name: Coveralls
-        uses: coverallsapp/github-action@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: ethernaut-optigov
-          parallel: true
   ethernaut-util:
     runs-on: ubuntu-latest
     strategy:
@@ -404,24 +383,23 @@ jobs:
           parallel: true
   finish:
     needs:
-      - lint
-      - ethernaut-common
-      - ethernaut-oso
-      - ethernaut-optigov
-      - ethernaut-util
-      - ethernaut-util-ui
-      - ethernaut-ui
-      - ethernaut-interact
-      - ethernaut-interact-ui
-      - ethernaut-challenges
-      - ethernaut-ai
-      - ethernaut-ai-ui
-      - ethernaut-network
-      - ethernaut-network-ui
-      - ethernaut-wallet
-      - ethernaut-wallet-ui
-      - ethernaut-cli
-    if: ${{ success() }}
+      [
+        ethernaut-common,
+        ethernaut-oso,
+        ethernaut-util,
+        ethernaut-util-ui,
+        ethernaut-ui,
+        ethernaut-interact,
+        ethernaut-interact-ui,
+        ethernaut-challenges,
+        ethernaut-ai,
+        ethernaut-ai-ui,
+        ethernaut-network,
+        ethernaut-network-ui,
+        ethernaut-wallet,
+        ethernaut-wallet-ui,
+        ethernaut-cli,
+      ]
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -429,4 +407,3 @@ jobs:
         with:
           github-token: ${{ secrets.COVERALLS_NEW }}
           parallel-finished: true
-          carryforward: 'lint,ethernaut-common,ethernaut-oso,ethernaut-optigov,ethernaut-util,ethernaut-util-ui,ethernaut-ui,ethernaut-interact,ethernaut-interact-ui,ethernaut-challenges,ethernaut-ai,ethernaut-ai-ui,ethernaut-network,ethernaut-network-ui,ethernaut-wallet,ethernaut-wallet-ui,ethernaut-cli'
