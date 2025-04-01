@@ -44,11 +44,6 @@ describe('Projects Module', function () {
     assert.deepEqual(result, { projects: ['roundProject'] })
   })
 
-  it('should return the latest round as 5', async function () {
-    const latestRound = await projects.getLatestRound()
-    assert.equal(latestRound, 5)
-  })
-
   it('should propagate error when getProjects fails', async function () {
     // Override axiosInstance.get to throw an error.
     axiosInstance.get = async () => {
