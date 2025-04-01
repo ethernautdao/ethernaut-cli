@@ -5,10 +5,6 @@ class Projects {
     this.agora = agora
   }
 
-  async getLatestRound() {
-    return 5 // Placeholder, you can implement this logic
-  }
-
   async getProjects({ limit = 10, offset = 0 } = {}) {
     try {
       const axiosInstance = this.agora.createAxiosInstance()
