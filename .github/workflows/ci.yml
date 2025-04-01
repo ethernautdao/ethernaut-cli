@@ -9,8 +9,6 @@ env:
   ALCHEMY_API_KEY: ${{ secrets.ALCHEMY_API_KEY }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   OSO_DEVELOPER_API_KEY: ${{ secrets.OSO_DEVELOPER_API_KEY }}
-  github-token: ${{ secrets.GITHUB_TOKEN }}
-  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_NEW }}
 
 jobs:
   lint:
@@ -48,9 +46,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-common && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-common
           parallel: true
   ethernaut-oso:
@@ -69,10 +67,31 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-oso && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-oso
+          parallel: true
+  ethernaut-optigov:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['20.12.0']
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run compile --if-present
+      - run: cd packages/ethernaut-optigov && npm t
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          flag-name: ethernaut-optigov
           parallel: true
   ethernaut-util:
     runs-on: ubuntu-latest
@@ -90,9 +109,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-util && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-util
           parallel: true
   ethernaut-util-ui:
@@ -111,9 +130,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-util-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-util-ui
           parallel: true
   ethernaut-ui:
@@ -132,9 +151,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-ui
           parallel: true
   ethernaut-interact:
@@ -159,9 +178,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-interact && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-interact
           parallel: true
   ethernaut-interact-ui:
@@ -186,9 +205,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-interact-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-interact-ui
           parallel: true
   ethernaut-challenges:
@@ -213,9 +232,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-challenges && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-challenges
           parallel: true
   ethernaut-ai:
@@ -234,9 +253,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-ai && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-ai
           parallel: true
   ethernaut-ai-ui:
@@ -255,9 +274,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-ai-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-ai-ui
           parallel: true
   ethernaut-network:
@@ -278,9 +297,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-network && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-network
           parallel: true
   ethernaut-network-ui:
@@ -301,9 +320,9 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-network-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-network-ui
           parallel: true
   ethernaut-wallet:
@@ -328,9 +347,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-wallet && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-wallet
           parallel: true
   ethernaut-wallet-ui:
@@ -355,9 +374,9 @@ jobs:
           sleep 5
       - run: cd packages/ethernaut-wallet-ui && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-wallet-ui
           parallel: true
   ethernaut-cli:
@@ -376,34 +395,35 @@ jobs:
       - run: npm run compile --if-present
       - run: cd packages/ethernaut-cli && npm t
       - name: Coveralls
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: ethernaut-cli
           parallel: true
   finish:
     needs:
-      [
-        ethernaut-common,
-        ethernaut-oso,
-        ethernaut-util,
-        ethernaut-util-ui,
-        ethernaut-ui,
-        ethernaut-interact,
-        ethernaut-interact-ui,
-        ethernaut-challenges,
-        ethernaut-ai,
-        ethernaut-ai-ui,
-        ethernaut-network,
-        ethernaut-network-ui,
-        ethernaut-wallet,
-        ethernaut-wallet-ui,
-        ethernaut-cli,
-      ]
+      - lint
+      - ethernaut-common
+      - ethernaut-oso
+      - ethernaut-optigov
+      - ethernaut-util
+      - ethernaut-util-ui
+      - ethernaut-ui
+      - ethernaut-interact
+      - ethernaut-interact-ui
+      - ethernaut-challenges
+      - ethernaut-ai
+      - ethernaut-ai-ui
+      - ethernaut-network
+      - ethernaut-network-ui
+      - ethernaut-wallet
+      - ethernaut-wallet-ui
+      - ethernaut-cli
+    if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@v2.3.6
+        uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_NEW }}
           parallel-finished: true
+          carryforward: 'lint,ethernaut-common,ethernaut-oso,ethernaut-optigov,ethernaut-util,ethernaut-util-ui,ethernaut-ui,ethernaut-interact,ethernaut-interact-ui,ethernaut-challenges,ethernaut-ai,ethernaut-ai-ui,ethernaut-network,ethernaut-network-ui,ethernaut-wallet,ethernaut-wallet-ui,ethernaut-cli'
