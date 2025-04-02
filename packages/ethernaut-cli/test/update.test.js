@@ -25,7 +25,6 @@ describe('update', function () {
   before('cache', async function () {
     const config = storage.readConfig()
     cachedAutoUpdate = config.general?.autoUpdate
-
     cachedPkg = fs.readFileSync('package.json', 'utf8')
   })
 
@@ -33,7 +32,6 @@ describe('update', function () {
     const config = storage.readConfig()
     config.general.autoUpdate = cachedAutoUpdate
     storage.saveConfig(config)
-
     fs.writeFileSync('package.json', cachedPkg, 'utf8')
   })
 
@@ -69,6 +67,7 @@ describe('update', function () {
     describe('when auto update is the current version', function () {
       before('modify', async function () {
         const pkg = JSON.parse(cachedPkg)
+        pkg.version = '0.0.0'
         const config = storage.readConfig()
         config.general.autoUpdate = pkg.version
         storage.saveConfig(config)
@@ -79,7 +78,7 @@ describe('update', function () {
       })
 
       it('displays navigation', async function () {
-        terminal.has('Pick a task or scope')
+        terminal.has('A new version of the ethernaut-cli is available')
       })
     })
 
