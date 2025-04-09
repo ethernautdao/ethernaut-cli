@@ -24,15 +24,21 @@ extendConfig((config, userConfig) => {
 
   config.ethernaut.ai = {
     model:
-      localConfig.ai?.model ||
-      userConfig.ethernaut?.ai?.model ||
-      'gpt-4-1106-preview',
+      localConfig.ai?.model || userConfig.ethernaut?.ai?.model || 'gpt-4o-mini',
+
     interpreter: {
       additionalInstructions:
         localConfig.ai?.interpreter?.additionalInstructions.concat() ||
         userConfig.ethernaut?.ai?.interpreter?.additionalInstructions?.concat() ||
         [],
     },
+    hubs: {
+      additionalInstructions:
+        localConfig.ai?.hubs?.additionalInstructions.concat() ||
+        userConfig.ethernaut?.ai?.hubs?.additionalInstructions?.concat() ||
+        [],
+    },
+
     explainer: {
       additionalInstructions:
         localConfig.ai?.explainer?.additionalInstructions?.concat() ||
