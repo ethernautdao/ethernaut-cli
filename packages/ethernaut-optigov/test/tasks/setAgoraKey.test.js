@@ -2,11 +2,24 @@ const assert = require('assert')
 const hre = require('hardhat')
 const storage = require('ethernaut-common/src/io/storage')
 const { setEnvVar } = require('ethernaut-common/src/io/env')
+const fs = require('fs')
+const path = require('path')
 
 describe('setAgoraKey task', function () {
   let originalEnv, originalSetEnvVar, originalSaveConfig, originalReadConfig
 
   beforeEach(function () {
+    // Ensure the .ethernaut directory and .env file exist in GitHub CI
+    const homeDir = process.env.HOME || process.env.USERPROFILE
+    const envDir = path.join(homeDir, '.ethernaut')
+    const envFile = path.join(envDir, '.env')
+    if (!fs.existsSync(envDir)) {
+      fs.mkdirSync(envDir, { recursive: true })
+    }
+    if (!fs.existsSync(envFile)) {
+      fs.writeFileSync(envFile, '')
+    }
+
     // Save original environment variable value
     originalEnv = process.env.AGORA_API_KEY
 
