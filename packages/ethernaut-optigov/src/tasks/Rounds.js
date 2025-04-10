@@ -1,7 +1,7 @@
 const types = require('ethernaut-common/src/validation/types')
 const output = require('ethernaut-common/src/ui/output')
 const Rounds = require('../internal/agora/Rounds')
-const Agora = require('../internal/agora/Agora')
+const agora = require('../internal/agora/agoraInstance')
 
 const LATEST = {
   yes: 'yes',
@@ -39,7 +39,6 @@ require('../scopes/optigov')
   )
   .setAction(async ({ limit, offset, roundId, latest }) => {
     try {
-      const agora = new Agora()
       const rounds = new Rounds(agora)
 
       if (latest === LATEST.yes) {

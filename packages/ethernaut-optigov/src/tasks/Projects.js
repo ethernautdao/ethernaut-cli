@@ -2,7 +2,7 @@ const types = require('ethernaut-common/src/validation/types')
 const output = require('ethernaut-common/src/ui/output')
 const Projects = require('../internal/agora/Projects')
 const Rounds = require('../internal/agora/Rounds')
-const Agora = require('../internal/agora/Agora')
+const agora = require('../internal/agora/agoraInstance')
 
 require('../scopes/optigov')
   .task(
@@ -81,7 +81,6 @@ function printProjects(projects) {
 }
 
 async function getProjects(limit, offset, round) {
-  const agora = new Agora()
   const projects = new Projects(agora)
   const rounds = new Rounds(agora)
 

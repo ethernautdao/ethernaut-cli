@@ -1,7 +1,7 @@
 const types = require('ethernaut-common/src/validation/types')
 const output = require('ethernaut-common/src/ui/output')
 const Proposals = require('../internal/agora/Proposals')
-const Agora = require('../internal/agora/Agora')
+const agora = require('../internal/agora/agoraInstance')
 
 const VOTES = {
   yes: 'yes',
@@ -40,7 +40,6 @@ require('../scopes/optigov')
   .setAction(async ({ limit, offset, proposalId, votes }) => {
     try {
       // Instantiate Agora and Proposals
-      const agora = new Agora()
       const proposals = new Proposals(agora)
 
       // If proposalId is provided, fetch specific proposal or votes
