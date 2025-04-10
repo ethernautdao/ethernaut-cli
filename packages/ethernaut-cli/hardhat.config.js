@@ -36,7 +36,11 @@ const OPTIMISM_TIMESTAMP =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update.json'
 const ZIP_URL_OPTIMISM =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/kb.zip'
-const FILES_DIR = path.join(__dirname, 'kb-files')
+const FILES_DIR = path.join(
+  __dirname,
+  '../../packages/ethernaut-ai/src/internal/assistants/docs/kb-files',
+)
+
 const TIMESTAMP_FILE = path.join(FILES_DIR, 'last-update.json')
 
 async function downloadFile(url) {
@@ -80,7 +84,6 @@ async function checkKB() {
 
 async function downloadKB() {
   try {
-    // Download and extract the KB
     if (fs.existsSync(FILES_DIR)) {
       // spinner.success(' Updating...')
     } else {
@@ -105,7 +108,6 @@ async function downloadKB() {
       const timestampData = await downloadFile(OPTIMISM_TIMESTAMP)
       const parsedData = JSON.parse(timestampData)
       fs.writeFileSync(TIMESTAMP_FILE, JSON.stringify(parsedData, null, 2))
-      // spinner.success('--- Updated ')
     } catch (error) {
       console.error('Error downloading or parsing timestamp file:', error)
     }

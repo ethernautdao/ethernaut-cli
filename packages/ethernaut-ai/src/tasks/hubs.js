@@ -52,7 +52,7 @@ require('../scopes/ai')
       spinner.success('Assistant done', 'ai')
 
       if (response) {
-        return output.resultBox(response, 'Response from documentation')
+        return output.resultBox(response, 'Response', true)
       } else {
         throw new EthernautCliError(
           'ethernaut-ai',

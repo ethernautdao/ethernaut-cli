@@ -1,11 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const openai = require('../../openai')
-
-const USE_VECTOR_STORE = false // my flag to test both solutions
+const USE_VECTOR_STORE = true // my flag to test both solutions
+const VECTOR_STORE_ID = 'OP_5'
 
 // Keywords associated with each document
-const documentKeywords = { 'extract from local docs': [] } // FIXME - remove
+const documentKeywords = require('../docs/kb-files/output/keywords.json')
 
 function extractKeywords(query) {
   // TBD DEPRECATED
@@ -46,10 +46,10 @@ function calculateRelevance(query, keywords) {
 }
 
 // Original keyword-based implementation
+// DEPRECATED
 function buildHubDocsWithKeywords(query) {
   const docs = []
-  const docsDir = path.join(__dirname, '../docs/op-community-hub')
-
+  const docsDir = path.join(__dirname, '../docs/kb-files/output/chapters')
   // Calculate relevance for each document
   const relevanceScores = Object.entries(documentKeywords).map(
     ([file, keywords]) => ({
@@ -76,53 +76,91 @@ function buildHubDocsWithKeywords(query) {
 // New vector store implementation
 async function buildHubDocsWithVector(query) {
   try {
-    // Get or create vector store
-    let vectorStore
-    const vectorStores = await openai().beta.vectorStores.list()
-    const existingStore = vectorStores.data.find(
-      (store) => store.name === 'Optimism Documentation',
-    )
+    let vectorStoreId
 
-    if (existingStore) {
-      vectorStore = existingStore
-    } else {
-      // Create new vector store with all documentation files
-      const docsDir = path.join(__dirname, '../docs/op-community-hub')
-      const files = Object.keys(documentKeywords)
-
-      // Upload files to OpenAI
-      const fileIds = await Promise.all(
-        files.map(async (file) => {
-          const content = fs.readFileSync(path.join(docsDir, file), 'utf8')
-          const response = await openai().files.create({
-            file: Buffer.from(content),
-            purpose: 'vector-store',
-          })
-          return response.id
-        }),
+    try {
+      const vectorStores = await openai().vectorStores.list()
+      const matchingVectorStore = vectorStores.data.find(
+        (store) => store.name === VECTOR_STORE_ID,
       )
 
-      vectorStore = await openai().beta.vectorStores.create({
-        name: 'Optimism Documentation',
-        file_ids: fileIds,
+      if (matchingVectorStore) {
+        vectorStoreId = matchingVectorStore.id
+      } else {
+        throw new Error('No knowledge base found, building...')
+      }
+    } catch (error) {
+      console.log('No knowledge base found, building...')
+
+      const docsDir = path.join(__dirname, '../docs/kb-files/output/chapters')
+      const files = Object.keys(documentKeywords)
+      const batchSize = 5 // Upload files in batches to avoid rate limits
+      const allFileIds = []
+
+      for (let i = 0; i < files.length; i += batchSize) {
+        const batch = files.slice(i, i + batchSize)
+        console.log(
+          `Processing batch ${i / batchSize + 1} of ${Math.ceil(files.length / batchSize)}`,
+        )
+
+        const fileIds = await Promise.all(
+          batch.map(async (file) => {
+            const filePath = path.join(docsDir, file)
+            console.log(`Uploading file: ${file}`)
+            try {
+              const fileStream = fs.createReadStream(filePath)
+              const response = await openai().files.create({
+                file: fileStream,
+                purpose: 'assistants',
+              })
+              return response.id
+            } catch (error) {
+              console.error(`Error uploading file ${file}:`, error)
+              return null
+            }
+          }),
+        )
+
+        // Filter out any failed uploads and add to all file IDs
+        const validFileIds = fileIds.filter((id) => id !== null)
+        allFileIds.push(...validFileIds)
+        console.log(`Valid file IDs in this batch: ${validFileIds.length}`)
+      }
+
+      //  Create the vector store
+      const vectorStore = await openai().vectorStores.create({
+        name: VECTOR_STORE_ID,
       })
+      vectorStoreId = vectorStore.id
+
+      // Add file IDs
+      if (allFileIds.length > 0) {
+        await openai().vectorStores.fileBatches.createAndPoll(vectorStoreId, {
+          file_ids: allFileIds,
+        })
+      }
     }
 
-    const results = await openai().beta.vectorStores.search({
-      vector_store_id: vectorStore.id,
-      query: query,
-      limit: 5,
+    // do the search
+    const results = await openai().vectorStores.search(vectorStoreId, {
+      query,
+      max_num_results: 5,
     })
+    const textSources = results.data.map((result) =>
+      result.content.map((c) => c.text),
+    )
 
-    return results.documents.map((doc) => doc.content)
+    return textSources
   } catch (error) {
-    console.error('Error using vector store:', error)
+    console.error(
+      'Error using vector store, falling back to keyword-based approach:',
+      error,
+    )
     // Fallback to keyword-based approach if vector store fails
     return buildHubDocsWithKeywords(query)
   }
 }
 
-// Main function that chooses between implementations
 async function buildHubDocs(query) {
   if (USE_VECTOR_STORE) {
     return await buildHubDocsWithVector(query)
