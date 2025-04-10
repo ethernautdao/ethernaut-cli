@@ -32,7 +32,7 @@ require('ethernaut-oso')
 require('ethernaut-ai-ui')
 require('ethernaut-optigov')
 
-const OPTIMISM_TIMESTAMP =
+const OP_REMOTE_FILE =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update.json'
 const ZIP_URL_OPTIMISM =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/kb.zip'
@@ -41,7 +41,7 @@ const FILES_DIR = path.join(
   '../../packages/ethernaut-ai/src/internal/assistants/docs/kb-files',
 )
 
-const TIMESTAMP_FILE = path.join(FILES_DIR, 'last-update.json')
+const OP_LOCAL_FILE = path.join(FILES_DIR, 'last-update.json')
 
 async function downloadFile(url) {
   const response = await fetch(url)
@@ -53,17 +53,17 @@ async function downloadFile(url) {
   return response.text()
 }
 
-let localTimestamp = null
+let localHash = null
 
 async function checkKB() {
   try {
-    if (fs.existsSync(TIMESTAMP_FILE)) {
+    if (fs.existsSync(OP_LOCAL_FILE)) {
       try {
-        const timestampData = fs.readFileSync(TIMESTAMP_FILE, 'utf8')
-        localTimestamp = JSON.parse(timestampData)
-        const timestampRepo = await downloadFile(OPTIMISM_TIMESTAMP)
-        const parsedData = JSON.parse(timestampRepo)
-        if (parsedData.last_update === localTimestamp.last_update) {
+        const localOpFile = fs.readFileSync(OP_LOCAL_FILE, 'utf8')
+        localHash = JSON.parse(localOpFile)
+        const remoteOpFile = await downloadFile(OP_REMOTE_FILE)
+        const remoteHash = JSON.parse(remoteOpFile)
+        if (remoteHash.last_commit === localHash.last_commit) {
           // spinner.success('--- KB already up to date')
           return
         } else {
@@ -105,9 +105,9 @@ async function downloadKB() {
     fs.unlinkSync(tempZipPath)
 
     try {
-      const timestampData = await downloadFile(OPTIMISM_TIMESTAMP)
+      const timestampData = await downloadFile(OP_REMOTE_FILE)
       const parsedData = JSON.parse(timestampData)
-      fs.writeFileSync(TIMESTAMP_FILE, JSON.stringify(parsedData, null, 2))
+      fs.writeFileSync(OP_LOCAL_FILE, JSON.stringify(parsedData, null, 2))
     } catch (error) {
       console.error('Error downloading or parsing timestamp file:', error)
     }

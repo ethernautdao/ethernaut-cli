@@ -4,9 +4,6 @@ const openai = require('../../openai')
 const USE_VECTOR_STORE = true // my flag to test both solutions
 const VECTOR_STORE_ID = 'OP_5'
 
-// Keywords associated with each document
-const documentKeywords = require('../docs/kb-files/output/keywords.json')
-
 function extractKeywords(query) {
   // TBD DEPRECATED
   // Convert query to lowercase and split into words
@@ -47,9 +44,13 @@ function calculateRelevance(query, keywords) {
 
 // Original keyword-based implementation
 // DEPRECATED
+// Keywords associated with each document
+const documentKeywords = require('../docs/kb-files/output/keywords.json')
+
 function buildHubDocsWithKeywords(query) {
   const docs = []
   const docsDir = path.join(__dirname, '../docs/kb-files/output/chapters')
+
   // Calculate relevance for each document
   const relevanceScores = Object.entries(documentKeywords).map(
     ([file, keywords]) => ({
