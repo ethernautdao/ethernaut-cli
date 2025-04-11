@@ -33,6 +33,10 @@ This plugin doesn't depend on any other plugins.
 This plugin adds the tasks listed below.
 
 - login Logs in to the Agora RetroPGF API with SIWE (Sign in with Ethereum)
+- projects Prints a list of projects registered in RetroPGF, given specified filters
+- proposals Prints a list of proposals registered in RetroPGF, given specified filters
+- delegate Prints a list of delegates on Agora, or details a specific delegate, with optional related data (votes or delegators)
+
 
 ## Environment extensions
 
