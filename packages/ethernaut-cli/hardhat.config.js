@@ -123,9 +123,9 @@ async function main() {
     `v${pkg.version} - Warning!!! BETA version. Please report issues here ${pkg.bugs.url}`,
   )
   storage.init()
-  await checkKB()
   await queryTelemetryConsent()
   await checkAutoUpdate(pkg)
+  await checkKB()
 }
 main()
 

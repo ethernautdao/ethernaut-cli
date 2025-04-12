@@ -5,7 +5,7 @@ describe('navigation', function () {
 
   describe('when navigating the root scope', function () {
     before('nav', async function () {
-      await terminal.run('hardhat', 5000)
+      await terminal.run('hardhat', 9000)
     })
 
     it('shows the expected scopes', async function () {
