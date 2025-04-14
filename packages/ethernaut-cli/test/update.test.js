@@ -18,8 +18,8 @@ describe('update', function () {
 
   async function triggerUpdate() {
     // Twice because this is how update notifications work
-    await terminal.run('hardhat', 2000)
-    await terminal.run('hardhat', 3000)
+    await terminal.run('hardhat', 5000)
+    await terminal.run('hardhat', 5000)
   }
 
   before('cache', async function () {
@@ -109,7 +109,7 @@ describe('update', function () {
         describe('when no thanks is selected', function () {
           before('interact', async function () {
             await terminal.input(keys.DOWN)
-            await terminal.input(keys.ENTER, 1000)
+            await terminal.input(keys.ENTER, 5000)
           })
 
           it('displays navigation', async function () {
@@ -123,7 +123,7 @@ describe('update', function () {
 
         describe('when install is selected', function () {
           before('interact', async function () {
-            await terminal.input(keys.ENTER, 2000)
+            await terminal.input(keys.ENTER, 5000)
           })
 
           it('displays installation message', async function () {
@@ -139,7 +139,7 @@ describe('update', function () {
           before('interact', async function () {
             await terminal.input(keys.DOWN)
             await terminal.input(keys.DOWN)
-            await terminal.input(keys.ENTER, 1000)
+            await terminal.input(keys.ENTER, 5000)
           })
 
           it('displays navigation', async function () {
@@ -162,7 +162,7 @@ describe('update', function () {
             await terminal.input(keys.DOWN)
             await terminal.input(keys.DOWN)
             await terminal.input(keys.DOWN)
-            await terminal.input(keys.ENTER, 1000)
+            await terminal.input(keys.ENTER, 5000)
           })
 
           it('displays navigation', async function () {

@@ -3,17 +3,25 @@ const boxen = require('boxen')
 const debug = require('./debug')
 const spinner = require('./spinner')
 const telemetry = require('../error/telemetry')
-
+const echomd = require('echomd')
 let _muted = false
 let _errorVerbose = false
 
-function resultBox(msg, title = 'Result') {
-  box(msg, {
-    title,
-    padding: 1,
-    borderStyle: 'round',
-    borderColor: 'blue',
-  })
+function resultBox(msg, title = 'Result', markdown = false) {
+  if (markdown) {
+    const width = process.stdout.columns || 80
+    const line = '─'.repeat(width)
+    console.log(`\n${line}\n`)
+    echomd(msg)
+    console.log(`\n${line}\n`)
+  } else {
+    box(msg, {
+      title,
+      padding: 1,
+      borderStyle: 'round',
+      borderColor: 'blue',
+    })
+  }
 
   return msg
 }

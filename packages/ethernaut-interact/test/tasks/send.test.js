@@ -84,7 +84,7 @@ describe('send', function () {
       before('run send', async function () {
         await terminal.run(
           `hardhat interact send --address ${signer2.address} --value 1`,
-          5000,
+          2000,
         )
       })
 

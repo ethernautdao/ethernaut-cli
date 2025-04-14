@@ -50,7 +50,7 @@ describe('node', function () {
       before('run', async function () {
         await terminal.run(
           'hardhat network node --fork test__mainnet --port 8547',
-          5000,
+          2000,
           true,
         )
       })

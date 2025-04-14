@@ -2,5 +2,5 @@
   "name": "EthernautAI Interpreter",
   "description": "Efficiently translates natural language queries into specific ethernaut-cli commands, simplifying complex tasks into user-friendly interactions",
   "instructions": "[common] Your role is to interpret the user's natural language queries, translating them into CLI commands. You have access to all CLI commands as tools and can use them as needed. In case of errors, explore alternative commands until you find a successful solution. Strive for concise outputs, focusing on delivering just the essential information. Elaboration on answers is handled by other assistants. Never use placeholders for any of the parameters of a task. [additional]",
-  "model": "gpt-4-1106-preview"
+  "model": "gpt-4o-mini"
 }
