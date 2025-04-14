@@ -7,10 +7,11 @@ describe('ballots task', function () {
   let originalGetBallot,
     originalSubmitBallot,
     originalOutputResultBox,
-    originalOutputErrorBox
+    originalOutputErrorBox,
+    originalGetSigners
 
   beforeEach(function () {
-    // Mock Ballots prototype methods
+    // Save original Ballots methods
     originalGetBallot = Ballots.prototype.getBallot
     originalSubmitBallot = Ballots.prototype.submitBallot
 
@@ -38,12 +39,23 @@ describe('ballots task', function () {
       return { success: true, payload }
     }
 
-    // Mock output methods for predictable string outputs
+    // Save original output methods
     originalOutputResultBox = output.resultBox
     originalOutputErrorBox = output.errorBox
 
     output.resultBox = (content, title) => `${title}: ${content}`
     output.errorBox = (error) => `Error: ${error.message}`
+
+    // Mock hre.ethers.getSigners to return a fake signer with address 0xabc
+    originalGetSigners = hre.ethers.getSigners
+    hre.ethers.getSigners = async function () {
+      return [
+        {
+          address: '0xabc',
+          signMessage: async (message) => 'signed:' + message,
+        },
+      ]
+    }
   })
 
   afterEach(function () {
@@ -52,14 +64,16 @@ describe('ballots task', function () {
 
     output.resultBox = originalOutputResultBox
     output.errorBox = originalOutputErrorBox
+
+    hre.ethers.getSigners = originalGetSigners
   })
 
   it('should return formatted ballot for action get', async function () {
     const result = await hre.run(
       { scope: 'optigov', task: 'ballots' },
-      { action: 'get', roundId: '1', addressOrEnsName: '0xabc' },
+      { action: 'get', roundId: '1', ballotContent: '{}' },
     )
-    // Verify that the result output contains a formatted ballot (e.g. its address)
+    // Verify that the result output contains a formatted ballot (e.g. its address and round id)
     assert(result.includes('Address: 0xabc'))
     assert(result.includes('Round ID: 1'))
   })
@@ -67,10 +81,10 @@ describe('ballots task', function () {
   it('should return submission result for action submit', async function () {
     const result = await hre.run(
       { scope: 'optigov', task: 'ballots' },
-      { action: 'submit', roundId: '1', addressOrEnsName: '0xabc' },
+      { action: 'submit', roundId: '1', ballotContent: '{}' },
     )
     assert(result.includes('Submit Ballot for Round 1 & 0xabc'))
-    assert(result.includes('"success":true')) // the JSON-stringified response
+    assert(result.includes('"success":true'))
   })
 
   it('should handle errors on action get', async function () {
@@ -79,7 +93,7 @@ describe('ballots task', function () {
     }
     const result = await hre.run(
       { scope: 'optigov', task: 'ballots' },
-      { action: 'get', roundId: '1', addressOrEnsName: '0xabc' },
+      { action: 'get', roundId: '1', ballotContent: '{}' },
     )
     assert(result.includes('Error: get error'))
   })
@@ -90,7 +104,7 @@ describe('ballots task', function () {
     }
     const result = await hre.run(
       { scope: 'optigov', task: 'ballots' },
-      { action: 'submit', roundId: '1', addressOrEnsName: '0xabc' },
+      { action: 'submit', roundId: '1', ballotContent: '{}' },
     )
     assert(result.includes('Error: submit error'))
   })
