@@ -1,7 +1,7 @@
 const types = require('ethernaut-common/src/validation/types')
 const output = require('ethernaut-common/src/ui/output')
 const Delegates = require('../internal/agora/Delegates')
-const Agora = require('../internal/agora/Agora')
+const agora = require('../internal/agora/agoraInstance')
 
 const RELATED_DATA = {
   votes: 'votes',
@@ -40,7 +40,6 @@ require('../scopes/optigov')
   )
   .setAction(async ({ limit, offset, address, relatedData }) => {
     try {
-      const agora = new Agora()
       const delegates = new Delegates(agora)
 
       if (address) {
@@ -78,7 +77,6 @@ require('../scopes/optigov')
 
       // If no specific address or ENS is given, fetch the list of delegates
       const delegateList = await delegates.getDelegates({ limit, offset })
-
       return output.resultBox(printDelegates(delegateList), 'Delegates')
     } catch (err) {
       return output.errorBox(err)

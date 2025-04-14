@@ -2,7 +2,7 @@ const output = require('ethernaut-common/src/ui/output')
 const { createSiweMessage } = require('../internal/Siwe')
 const EthernautCliError = require('ethernaut-common/src/error/error')
 const Auth = require('../internal/agora/Auth')
-const Agora = require('../internal/agora/Agora')
+const agora = require('../internal/agora/agoraInstance')
 
 require('../scopes/optigov')
   .task(
@@ -25,7 +25,6 @@ require('../scopes/optigov')
         'ethernaut-optigov',
       )
 
-      const agora = new Agora()
       const auth = new Auth(agora)
 
       const statement = 'Log in to Agoras RetroPGF API with SIWE.'
@@ -39,7 +38,7 @@ require('../scopes/optigov')
 
       await auth.authenticateWithAgora(preparedMessage, signature, nonce)
 
-      return output.resultBox(`Logged in with address: ${signer.address})`)
+      return output.resultBox(`Logged in with address: ${signer.address}`)
     } catch (err) {
       return output.errorBox(err)
     }

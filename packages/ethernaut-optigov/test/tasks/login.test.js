@@ -62,7 +62,7 @@ describe('login task', function () {
 
     assert.equal(
       result,
-      'Logged in with address: 0x2bEB8D9eD2cE57E124D195e414d23681559577f7)',
+      'Logged in with address: 0x2bEB8D9eD2cE57E124D195e414d23681559577f7',
     )
   })
 
