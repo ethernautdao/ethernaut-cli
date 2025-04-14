@@ -14,7 +14,10 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "copy-paste": "^1.5.3",
-    "openai": "^4.87.3"
+    "openai": "^4.87.3",
+    "axios": "^1.6.7",
+    "adm-zip": "^0.5.10",
+    "fs-extra": "^11.2.0"
   },
   "peerDependencies": {
     "hardhat": "^2.22.2"

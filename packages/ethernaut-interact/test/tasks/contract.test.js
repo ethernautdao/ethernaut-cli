@@ -137,7 +137,7 @@ describe('contract', function () {
           before('run contract', async function () {
             await terminal.run(
               `hardhat interact contract --address ${await sample.getAddress()} --abi ${abiPath} --fn incrementCounter --params 42`,
-              5000,
+              2000,
             )
           })
 

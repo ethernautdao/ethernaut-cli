@@ -42,6 +42,10 @@ Anvil
 
 `foundryup`
 
+xClip (on Debian/Ubuntu systems)
+
+`sudo apt install xclip`
+
 ## Development
 
 This is a monorepo built with [lerna](https://lerna.js.org/), composed of [hardhat](https://github.com/NomicFoundation/hardhat) plugins. The global nodejs application entry point is in `packages/ethernaut-cli/ethernaut`. All code is vanilla javascript.

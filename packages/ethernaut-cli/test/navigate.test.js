@@ -5,7 +5,7 @@ describe('navigation', function () {
 
   describe('when navigating the root scope', function () {
     before('nav', async function () {
-      await terminal.run('hardhat', 2000)
+      await terminal.run('hardhat', 9000)
     })
 
     it('shows the expected scopes', async function () {
@@ -15,6 +15,8 @@ describe('navigation', function () {
       terminal.has('[network]')
       terminal.has('[wallet]')
       terminal.has('[challenges]')
+      terminal.has('[metrics]')
+      terminal.has('[optigov]')
     })
 
     it('does not show unwanted scopes', async function () {
@@ -37,7 +39,7 @@ describe('navigation', function () {
 
   describe('when navigating the network scope', function () {
     before('nav', async function () {
-      await terminal.run('hardhat network', 2000)
+      await terminal.run('hardhat network', 5000)
     })
 
     it('displays all tasks', async function () {

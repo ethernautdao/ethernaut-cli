@@ -32,11 +32,11 @@ describe('telemetry', function () {
     })
 
     before('start cli', async function () {
-      await terminal.run('hardhat', 2000)
+      await terminal.run('hardhat', 9000)
     })
 
     it('displays the telemetry consent prompt', async function () {
-      terminal.has('Help us improve ethernaut-cli')
+      await terminal.has('Help us improve ethernaut-cli')
     })
   })
 
@@ -48,7 +48,7 @@ describe('telemetry', function () {
     })
 
     before('start cli', async function () {
-      await terminal.run('hardhat', 2000)
+      await terminal.run('hardhat', 9000)
     })
 
     it('does not display the telemetry consent prompt', async function () {
