@@ -32,8 +32,8 @@ describe('ballots task', function () {
     }
 
     Ballots.prototype.submitBallot = async function (
-      roundId,
-      addressOrEnsName,
+      _roundId,
+      _addressOrEnsName,
       payload,
     ) {
       return { success: true, payload }
@@ -81,7 +81,7 @@ describe('ballots task', function () {
   it('should return submission result for action submit', async function () {
     const result = await hre.run(
       { scope: 'optigov', task: 'ballots' },
-      { action: 'submit', roundId: '1', ballotContent: '{}' },
+      { action: 'submit', roundId: '1', ballotContent: '{"data":123}' },
     )
     assert(result.includes('Submit Ballot for Round 1 & 0xabc'))
     assert(result.includes('"success":true'))
@@ -107,5 +107,67 @@ describe('ballots task', function () {
       { action: 'submit', roundId: '1', ballotContent: '{}' },
     )
     assert(result.includes('Error: submit error'))
+  })
+
+  it('should return raw string ballot if getBallot returns a string', async function () {
+    Ballots.prototype.getBallot = async function (_roundId, _addressOrEnsName) {
+      return 'raw ballot string'
+    }
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'get', roundId: '2', ballotContent: '{}' },
+    )
+    assert(result.includes('raw ballot string'))
+    assert(result.includes('Ballot for Round 2 & 0xabc'))
+  })
+
+  it('should return raw string result if submitBallot returns a string', async function () {
+    Ballots.prototype.submitBallot = async function (
+      _roundId,
+      _addressOrEnsName,
+      _payload,
+    ) {
+      return 'raw submit result'
+    }
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'submit', roundId: '2', ballotContent: '{"data":123}' },
+    )
+    assert(result.includes('raw submit result'))
+    assert(result.includes('Submit Ballot for Round 2 & 0xabc'))
+  })
+
+  it('should use default content when ballotContent is not provided for submit', async function () {
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'submit', roundId: '3', ballotContent: '{}' },
+    )
+    assert(result.includes('Submit Ballot for Round 3 & 0xabc'))
+  })
+
+  it('should error for an invalid action', async function () {
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'invalidAction', roundId: '1', ballotContent: '{}' },
+    )
+    assert(result.includes('Error: Invalid action. Use "get" or "submit".'))
+  })
+
+  it('should throw error when no signers available for get', async function () {
+    hre.ethers.getSigners = async () => []
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'get', roundId: '1', ballotContent: '{}' },
+    )
+    assert(result.includes('Error: No signers available.'))
+  })
+
+  it('should throw error when no signers available for submit', async function () {
+    hre.ethers.getSigners = async () => []
+    const result = await hre.run(
+      { scope: 'optigov', task: 'ballots' },
+      { action: 'submit', roundId: '1', ballotContent: '{}' },
+    )
+    assert(result.includes('Error: No signers available.'))
   })
 })
