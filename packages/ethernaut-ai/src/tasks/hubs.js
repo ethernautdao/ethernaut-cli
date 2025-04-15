@@ -10,7 +10,7 @@ const EthernautCliError = require('ethernaut-common/src/error/error')
 const TIMEOUT = 600000
 
 require('../scopes/ai')
-  .task('hubs', 'Get information from the Optimism Community Hub documentation')
+  .task('hubs', '🔴 Chat with the Optimism Community Hub documentation 🤖')
   .addPositionalParam(
     'query',
     'The question to ask about Optimism',

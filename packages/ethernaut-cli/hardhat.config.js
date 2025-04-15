@@ -32,6 +32,7 @@ require('ethernaut-oso')
 require('ethernaut-ai-ui')
 require('ethernaut-optigov')
 require('ethernaut-optimist')
+require('ethernaut-optiforum')
 
 const OP_REMOTE_FILE =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update.json'
