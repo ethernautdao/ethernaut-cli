@@ -9,39 +9,6 @@ const EthernautCliError = require('ethernaut-common/src/error/error')
 
 const TIMEOUT = 600000
 
-// OP Delegates -> https://vote.optimism.io/delegates
-// OP Proposals -> https://vote.optimism.io/
-// OP Forum -> https://gov.optimism.io/
-// OP RPGF -> https://retrofunding.optimism.io/
-
-// Constitution -> https://gov.optimism.io/t/working-constitution-of-the-optimism-collective/55
-// Code of Conduct -> https://gov.optimism.io/t/code-of-conduct/5751
-// OPerating Manual -> https://github.com/ethereum-optimism/OPerating-manual/blob/main/manual.md
-
-// OP Stack Docs -> https://docs.optimism.io/stack/getting-started
-// App Developer guide -> https://docs.optimism.io/builders/app-developers/overview
-// Chain Operators guide -> https://docs.optimsssism.io/builders/chain-operators/self-hosted
-// Node Operators guide -> https://docs.optimism.io/builders/node-operators/rollup-node
-// Developer Tools -> https://docs.optimism.io/builders/tools/overview
-
-// Governance Docs -> https://community.optimism.io/
-// Citizen House -> https://community.optimism.io/citizens-house/citizen-house-overview
-// Token House -> https://community.optimism.io/token-house/token-house-overview
-// Grants -> https://community.optimism.io/grant/grant-overview
-// OP token -> https://community.optimism.io/op-token/op-token-overview
-
-// Governance Docs
-// Citizen House
-// Token House
-// Grants
-// OP token
-
-// OP Stack Docs
-// App Developer guide
-// Chain Operators guide
-// Node Operators guide
-// Developer Tools
-
 require('../scopes/ai')
   .task('dev-docs', '🔴 Chat with the Optimism developer documentation')
   .addPositionalParam(

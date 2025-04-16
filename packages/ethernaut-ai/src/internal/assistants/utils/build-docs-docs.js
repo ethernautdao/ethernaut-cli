@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const openai = require('../../openai')
-const VECTOR_STORE_ID = 'OP_DOCS_6'
+const VECTOR_STORE_ID = 'OP_DOCS_7'
 
 const documentKeywords = require('../docs/kb-files/output/optimism/docs/keywords.json')
 

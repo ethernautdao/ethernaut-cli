@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const openai = require('../../openai')
 const USE_VECTOR_STORE = true // my flag to test both solutions
-const VECTOR_STORE_ID = 'OP_6'
+const VECTOR_STORE_ID = 'OP_HUB_7'
 
 function extractKeywords(query) {
   // TBD DEPRECATED
@@ -98,7 +98,11 @@ async function buildHubDocsWithVector(query) {
     } catch (error) {
       console.log('No knowledge base found, please wait while building...')
 
-      const docsDir = path.join(__dirname, '../docs/kb-files/output/chapters')
+      const docsDir = path.join(
+        __dirname,
+        '../docs/kb-files/output/optimism/docs/chapters',
+      )
+
       const files = Object.keys(documentKeywords)
       const batchSize = 5 // Upload files in batches to avoid rate limits
       const allFileIds = []
