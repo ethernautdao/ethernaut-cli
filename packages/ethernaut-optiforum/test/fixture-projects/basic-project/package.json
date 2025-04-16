@@ -1,0 +1,7 @@
+{
+  "name": "basic-project",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "ethers": "^6.11.1"
+  }
+}

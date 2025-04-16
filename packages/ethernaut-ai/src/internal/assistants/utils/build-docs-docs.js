@@ -1,84 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 const openai = require('../../openai')
-const USE_VECTOR_STORE = true // my flag to test both solutions
-const VECTOR_STORE_ID = 'OP_HUB_7'
+const VECTOR_STORE_ID = 'OP_DOCS_7'
 
-function extractKeywords(query) {
-  // TBD DEPRECATED
-  // Convert query to lowercase and split into words
-  const words = query.toLowerCase().split(/\s+/)
-
-  // Remove common words and short words
-  const commonWords = new Set([
-    'the',
-    'a',
-    'an',
-    'and',
-    'or',
-    'but',
-    'in',
-    'on',
-    'at',
-    'to',
-    'for',
-    'of',
-    'with',
-    'by',
-  ])
-  return words.filter((word) => word.length > 2 && !commonWords.has(word))
-}
-
-function calculateRelevance(query, keywords) {
-  const queryKeywords = extractKeywords(query)
-  let relevance = 0
-
-  for (const keyword of queryKeywords) {
-    if (keywords.some((k) => k.includes(keyword))) {
-      relevance += 1
-    }
-  }
-
-  return relevance
-}
-
-// Original keyword-based implementation
-// DEPRECATED
-// Keywords associated with each document
-const documentKeywords = require('../docs/kb-files/output/optimism/community-hub/keywords.json')
-
-function buildHubDocsWithKeywords(query) {
-  const docs = []
-  const docsDir = path.join(
-    __dirname,
-    '../docs/kb-files/output/optimism/community-hub/chapters',
-  )
-
-  // Calculate relevance for each document
-  const relevanceScores = Object.entries(documentKeywords).map(
-    ([file, keywords]) => ({
-      file,
-      relevance: calculateRelevance(query, keywords),
-    }),
-  )
-
-  // Sort by relevance and take top 5 most relevant documents
-  const topDocs = relevanceScores
-    .sort((a, b) => b.relevance - a.relevance)
-    .slice(0, 5)
-    .map((item) => item.file)
-
-  // Read only the most relevant documents
-  topDocs.forEach((file) => {
-    const content = fs.readFileSync(path.join(docsDir, file), 'utf8')
-    docs.push(content)
-  })
-
-  return docs
-}
+const documentKeywords = require('../docs/kb-files/output/optimism/docs/keywords.json')
 
 // New vector store implementation 🔴
-async function buildHubDocsWithVector(query) {
+async function buildDocsDocsWithVector(query) {
   try {
     let vectorStoreId
 
@@ -102,7 +30,6 @@ async function buildHubDocsWithVector(query) {
         __dirname,
         '../docs/kb-files/output/optimism/docs/chapters',
       )
-
       const files = Object.keys(documentKeywords)
       const batchSize = 5 // Upload files in batches to avoid rate limits
       const allFileIds = []
@@ -165,17 +92,11 @@ async function buildHubDocsWithVector(query) {
       'Error using vector store, falling back to keyword-based approach:',
       error,
     )
-    // Fallback to keyword-based approach if vector store fails
-    // return buildHubDocsWithKeywords(query) // FIXME
   }
 }
 
-async function buildHubDocs(query) {
-  if (USE_VECTOR_STORE) {
-    return await buildHubDocsWithVector(query)
-  } else {
-    return buildHubDocsWithKeywords(query)
-  }
+async function buildDocsDocs(query) {
+  return await buildDocsDocsWithVector(query)
 }
 
-module.exports = buildHubDocs
+module.exports = buildDocsDocs

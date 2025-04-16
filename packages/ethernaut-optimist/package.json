@@ -1,7 +1,7 @@
 {
-  "name": "ethernaut-ai",
-  "version": "1.1.11",
-  "description": "AI assistant that interprets user input and executes hardhat tasks and chat with OP docs",
+  "name": "ethernaut-optimist",
+  "version": "1.0.0",
+  "description": "A subset of tools tailored for Optimism devs",
   "main": "src/index.js",
   "scripts": {
     "build": "npm run install:test",
@@ -9,16 +9,8 @@
     "install:test": "cd test/fixture-projects/basic-project && npm install",
     "test": "nyc --nycrc-path ../../.nycrc.json mocha --config ../../.mocharc.json"
   },
-  "author": "Alejandro Santander",
+  "author": "Leo Sagan",
   "license": "ISC",
-  "dependencies": {
-    "chalk": "^2.4.2",
-    "copy-paste": "^1.5.3",
-    "openai": "^4.87.3",
-    "axios": "^1.6.7",
-    "adm-zip": "^0.5.10",
-    "fs-extra": "^11.2.0"
-  },
   "peerDependencies": {
     "hardhat": "^2.22.2"
   },
@@ -28,5 +20,14 @@
     "nyc": "^15.1.0",
     "nyc-report-lcov-absolute": "^1.0.0"
   },
+  "dependencies": {
+    "dotenv": "^16.3.2",
+    "node-fetch": "^2.7.0",
+    "siwe": "^2.3.2"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [],
   "gitHead": "5ffea95c7b8186e6365da19d189a79f09a78d475"
 }

@@ -1,5 +1,5 @@
 const types = require('ethernaut-common/src/validation/types')
-const HubsAssistant = require('../internal/assistants/HubsAssistant')
+const DocsAssistant = require('../internal/assistants/DocsAssistant')
 const Thread = require('../internal/threads/Thread')
 const output = require('ethernaut-common/src/ui/output')
 const spinner = require('ethernaut-common/src/ui/spinner')
@@ -10,10 +10,10 @@ const EthernautCliError = require('ethernaut-common/src/error/error')
 const TIMEOUT = 600000
 
 require('../scopes/ai')
-  .task('hubs', '🔴 Chat with the Optimism documentation')
+  .task('dev-docs', '🔴 Chat with the Optimism developer documentation')
   .addPositionalParam(
     'query',
-    'The question to ask about Optimism',
+    'The question to ask about Optimism dev docs',
     undefined,
     types.string,
   )
@@ -38,14 +38,14 @@ require('../scopes/ai')
       const buildingAssistantLIstener = () =>
         spinner.progress('Building assistant...', 'ai')
 
-      const hubs = new HubsAssistant(hre)
-      hubs.on('status_update', statusUpdateListener)
-      hubs.on('building_assistant', buildingAssistantLIstener)
+      const docs = new DocsAssistant(hre)
+      docs.on('status_update', statusUpdateListener)
+      docs.on('building_assistant', buildingAssistantLIstener)
 
       spinner.progress('Thinking...', 'ai')
       const waitPromise = wait(TIMEOUT)
       const response = await Promise.race([
-        hubs.process(thread, model),
+        docs.process(thread, model),
         waitPromise,
       ])
 
