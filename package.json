@@ -25,6 +25,8 @@
     "prettier": "^3.2.5"
   },
   "dependencies": {
-    "echomd": "^0.2.3"
+    "axios": "^1.8.4",
+    "echomd": "^0.2.3",
+    "node-fetch": "^2.7.0"
   }
 }

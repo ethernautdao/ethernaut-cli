@@ -45,5 +45,11 @@ extendConfig((config, userConfig) => {
         userConfig.ethernaut?.ai?.explainer?.additionalInstructions.concat() ||
         [],
     },
+    docs: {
+      additionalInstructions:
+        localConfig.ai?.docs?.additionalInstructions?.concat() ||
+        userConfig.ethernaut?.ai?.docs?.additionalInstructions?.concat() ||
+        [],
+    },
   }
 })

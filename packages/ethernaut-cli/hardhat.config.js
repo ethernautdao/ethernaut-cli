@@ -34,16 +34,21 @@ require('ethernaut-optigov')
 require('ethernaut-optimist')
 require('ethernaut-optiforum')
 
-const OP_REMOTE_FILE =
-  'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update.json'
-const ZIP_URL_OPTIMISM =
+const OP_REMOTE_FILE_HUB =
+  'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update-hub.json'
+
+const OP_REMOTE_FILE_DOCS =
+  'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/last-update-docs.json'
+
+const OP_ZIP_URL =
   'https://github.com/raiseerco/ethernaut-app-kb/releases/download/daily/kb.zip'
 const FILES_DIR = path.join(
   __dirname,
   '../../packages/ethernaut-ai/src/internal/assistants/docs/kb-files',
 )
 
-const OP_LOCAL_FILE = path.join(FILES_DIR, 'last-update.json')
+const OP_LOCAL_FILE_HUB = path.join(FILES_DIR, 'last-update-hub.json')
+const OP_LOCAL_FILE_DOCS = path.join(FILES_DIR, 'last-update-docs.json')
 
 async function downloadFile(url) {
   const response = await fetch(url)
@@ -55,17 +60,27 @@ async function downloadFile(url) {
   return response.text()
 }
 
-let localHash = null
+let localHashHub = null
+let localHashDocs = null
 
 async function checkKB() {
   try {
-    if (fs.existsSync(OP_LOCAL_FILE)) {
+    if (fs.existsSync(OP_LOCAL_FILE_HUB) && fs.existsSync(OP_LOCAL_FILE_DOCS)) {
       try {
-        const localOpFile = fs.readFileSync(OP_LOCAL_FILE, 'utf8')
-        localHash = JSON.parse(localOpFile)
-        const remoteOpFile = await downloadFile(OP_REMOTE_FILE)
-        const remoteHash = JSON.parse(remoteOpFile)
-        if (remoteHash.last_commit === localHash.last_commit) {
+        const localOpFileHub = fs.readFileSync(OP_LOCAL_FILE_HUB, 'utf8')
+        localHashHub = JSON.parse(localOpFileHub)
+        const remoteOpFileHub = await downloadFile(OP_REMOTE_FILE_HUB)
+        const remoteHashHub = JSON.parse(remoteOpFileHub)
+
+        const localOpFileDocs = fs.readFileSync(OP_LOCAL_FILE_DOCS, 'utf8')
+        localHashDocs = JSON.parse(localOpFileDocs)
+        const remoteOpFileDocs = await downloadFile(OP_REMOTE_FILE_DOCS)
+        const remoteHashDocs = JSON.parse(remoteOpFileDocs)
+
+        if (
+          remoteHashHub.last_commit === localHashHub.last_commit &&
+          remoteHashDocs.last_commit === localHashDocs.last_commit
+        ) {
           // spinner.success('--- KB already up to date')
           return
         } else {
@@ -93,7 +108,7 @@ async function downloadKB() {
     }
 
     const tempZipPath = path.join(__dirname, 'temp.zip')
-    const response = await fetch(ZIP_URL_OPTIMISM)
+    const response = await fetch(OP_ZIP_URL)
     if (!response.ok) {
       throw new Error(
         `Failed to download ZIP: ${response.status} ${response.statusText}`,
@@ -107,9 +122,19 @@ async function downloadKB() {
     fs.unlinkSync(tempZipPath)
 
     try {
-      const timestampData = await downloadFile(OP_REMOTE_FILE)
-      const parsedData = JSON.parse(timestampData)
-      fs.writeFileSync(OP_LOCAL_FILE, JSON.stringify(parsedData, null, 2))
+      const timestampDataHub = await downloadFile(OP_REMOTE_FILE_HUB)
+      const parsedDataHub = JSON.parse(timestampDataHub)
+      fs.writeFileSync(
+        OP_LOCAL_FILE_HUB,
+        JSON.stringify(parsedDataHub, null, 2),
+      )
+
+      const timestampDataDocs = await downloadFile(OP_REMOTE_FILE_DOCS)
+      const parsedDataDocs = JSON.parse(timestampDataDocs)
+      fs.writeFileSync(
+        OP_LOCAL_FILE_DOCS,
+        JSON.stringify(parsedDataDocs, null, 2),
+      )
     } catch (error) {
       console.error('Error downloading or parsing timestamp file:', error)
     }
