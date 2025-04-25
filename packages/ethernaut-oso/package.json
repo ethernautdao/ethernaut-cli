@@ -1,6 +1,6 @@
 {
   "name": "ethernaut-oso",
-  "version": "1.1.12",
+  "version": "1.2.0",
   "description": "Tasks for interacting with Open Source Observer, a tool for tracking and analyzing the metrics of open source projects.",
   "main": "src/index.js",
   "scripts": {

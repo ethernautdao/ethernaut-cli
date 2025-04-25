@@ -1,6 +1,6 @@
 {
   "name": "ethernaut-optimist",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A subset of tools tailored for Optimism devs",
   "main": "src/index.js",
   "scripts": {

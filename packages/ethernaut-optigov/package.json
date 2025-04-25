@@ -1,6 +1,6 @@
 {
   "name": "ethernaut-optigov",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Tasks for interacting the Optimism Agora retroactive public goods funding rounds (RetroPGF)",
   "main": "src/index.js",
   "scripts": {
