@@ -28,13 +28,13 @@ It can also be used as a regular cli:
 
 And also features an interactive mode that allows easy navigation of tasks and collection of task arguments.
 
-## Installation
+### Prerequisites:
 
-This CLI is mean to be installed globally, and not as a per-project task runner as hardhat is normally used for.
+Node.js
 
-`npm i -g ethernaut-cli`
+`curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -`
 
-### Additional requirements:
+`sudo apt install nodejs`
 
 Anvil
 
@@ -206,21 +206,21 @@ All the plugins combined conform the ethernaut-cli.
 
 <summary>List of packages</summary>
 
-| Title                                                             | Description                                                             |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [ethernaut-ai](packages/ethernaut-ai/README.md)                   | AI assistant that interprets user input and executes hardhat tasks      |
-| [ethernaut-ai-ui](packages/ethernaut-ai-ui/README.md)             | Ui extensions for the ethernaut-ai package                              |
-| [ethernaut-cli](packages/ethernaut-cli/README.md)                 | Main hardhat project                                                    |
-| [ethernaut-challenges](packages/ethernaut-challenges/README.md)   | Tasks for playing the Open Zeppelin Ethernaut challenges from the CLI   |
-| [ethernaut-common](packages/ethernaut-common/README.md)           | Common utils used by several ethernaut-cli plugins                      |
-| [ethernaut-interact](packages/ethernaut-interact/README.md)       | Tasks for sending transactions and interacting with contracts           |
-| [ethernaut-interact-ui](packages/ethernaut-interact-ui/README.md) | Ui extensions for the ethernaut-interact package                        |
-| [ethernaut-network](packages/ethernaut-network/README.md)         | Tasks for interacting with different networks                           |
-| [ethernaut-network-ui](packages/ethernaut-network-ui/README.md)   | Ui extensions for the ethernaut-network package                         |
-| [ethernaut-ui](packages/ethernaut-ui/README.md)                   | Intuitive navigation and interactive param collection for hardhat tasks |
-| [ethernaut-util](packages/ethernaut-util/README.md)               | Simple, everyday utilities for Ethereum devs                            |
-| [ethernaut-util-ui](packages/ethernaut-util-ui/README.md)         | Ui extensions for the ethernaut-util package                            |
-| [ethernaut-wallet](packages/ethernaut-wallet/README.md)           | Tasks for interacting from different Ethereum accounts                  |
-| [ethernaut-wallet-ui](packages/ethernaut-wallet-ui/README.md)     | Ui extensions for the ethernaut-wallet package                          |
+| Title                                                             | Description                                                                                            |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| [ethernaut-ai](packages/ethernaut-ai/README.md)                   | AI assistant that interprets user input and executes hardhat tasks and talks to Optimism documentation |
+| [ethernaut-ai-ui](packages/ethernaut-ai-ui/README.md)             | Ui extensions for the ethernaut-ai package                                                             |
+| [ethernaut-cli](packages/ethernaut-cli/README.md)                 | Main hardhat project                                                                                   |
+| [ethernaut-challenges](packages/ethernaut-challenges/README.md)   | Tasks for playing the Open Zeppelin Ethernaut challenges from the CLI                                  |
+| [ethernaut-common](packages/ethernaut-common/README.md)           | Common utils used by several ethernaut-cli plugins                                                     |
+| [ethernaut-interact](packages/ethernaut-interact/README.md)       | Tasks for sending transactions and interacting with contracts                                          |
+| [ethernaut-interact-ui](packages/ethernaut-interact-ui/README.md) | Ui extensions for the ethernaut-interact package                                                       |
+| [ethernaut-network](packages/ethernaut-network/README.md)         | Tasks for interacting with different networks                                                          |
+| [ethernaut-network-ui](packages/ethernaut-network-ui/README.md)   | Ui extensions for the ethernaut-network package                                                        |
+| [ethernaut-ui](packages/ethernaut-ui/README.md)                   | Intuitive navigation and interactive param collection for hardhat tasks                                |
+| [ethernaut-util](packages/ethernaut-util/README.md)               | Simple, everyday utilities for Ethereum devs                                                           |
+| [ethernaut-util-ui](packages/ethernaut-util-ui/README.md)         | Ui extensions for the ethernaut-util package                                                           |
+| [ethernaut-wallet](packages/ethernaut-wallet/README.md)           | Tasks for interacting from different Ethereum accounts                                                 |
+| [ethernaut-wallet-ui](packages/ethernaut-wallet-ui/README.md)     | Ui extensions for the ethernaut-wallet package                                                         |
 
 </details>
