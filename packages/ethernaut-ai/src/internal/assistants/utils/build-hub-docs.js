@@ -45,7 +45,15 @@ function calculateRelevance(query, keywords) {
 // Original keyword-based implementation
 // DEPRECATED
 // Keywords associated with each document
-const documentKeywords = require('../docs/kb-files/output/optimism/community-hub/keywords.json')
+let documentKeywords = {}
+try {
+  documentKeywords = require('../docs/kb-files/output/optimism/community-hub/keywords.json')
+} catch (err) {
+  // expected exception on 1st run
+  if (err.code !== 'MODULE_NOT_FOUND') {
+    throw err
+  }
+}
 
 function buildHubDocsWithKeywords(query) {
   const docs = []
@@ -53,6 +61,11 @@ function buildHubDocsWithKeywords(query) {
     __dirname,
     '../docs/kb-files/output/optimism/community-hub/chapters',
   )
+
+  // Si no hay keywords, devolver array vacío
+  if (Object.keys(documentKeywords).length === 0) {
+    return docs
+  }
 
   // Calculate relevance for each document
   const relevanceScores = Object.entries(documentKeywords).map(
@@ -100,10 +113,13 @@ async function buildHubDocsWithVector(query) {
 
       const docsDir = path.join(
         __dirname,
-        '../docs/kb-files/output/optimism/docs/chapters',
+        '../docs/kb-files/output/optimism/community-hub/chapters',
       )
 
-      const files = Object.keys(documentKeywords)
+      const files =
+        Object.keys(documentKeywords).length > 0
+          ? Object.keys(documentKeywords)
+          : fs.readdirSync(docsDir).filter((file) => file.endsWith('.md'))
       const batchSize = 5 // Upload files in batches to avoid rate limits
       const allFileIds = []
 

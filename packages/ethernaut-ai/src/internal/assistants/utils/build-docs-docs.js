@@ -3,7 +3,15 @@ const path = require('path')
 const openai = require('../../openai')
 const VECTOR_STORE_ID = 'OP_DOCS_7'
 
-const documentKeywords = require('../docs/kb-files/output/optimism/docs/keywords.json')
+let documentKeywords = {}
+try {
+  documentKeywords = require('../docs/kb-files/output/optimism/docs/keywords.json')
+} catch (err) {
+  // expected exception on 1st run
+  if (err.code !== 'MODULE_NOT_FOUND') {
+    throw err
+  }
+}
 
 // New vector store implementation 🔴
 async function buildDocsDocsWithVector(query) {
@@ -30,7 +38,10 @@ async function buildDocsDocsWithVector(query) {
         __dirname,
         '../docs/kb-files/output/optimism/docs/chapters',
       )
-      const files = Object.keys(documentKeywords)
+      const files =
+        Object.keys(documentKeywords).length > 0
+          ? Object.keys(documentKeywords)
+          : fs.readdirSync(docsDir).filter((file) => file.endsWith('.md'))
       const batchSize = 5 // Upload files in batches to avoid rate limits
       const allFileIds = []
 
