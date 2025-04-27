@@ -1,6 +1,6 @@
 {
   "name": "ethernaut-cli",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Ai agent cli with web3 capabilities",
   "license": "ISC",
   "author": "Alejandro Santander",
@@ -47,7 +47,7 @@
     "adm-zip": "^0.5.10",
     "chalk-animation": "^1.6.0",
     "dotenv": "^16.4.1",
-    "ethernaut-ai": "^1.2.0",
+    "ethernaut-ai": "^1.2.1",
     "ethernaut-ai-ui": "^1.2.0",
     "ethernaut-challenges": "^1.2.0",
     "ethernaut-common": "^1.2.0",
