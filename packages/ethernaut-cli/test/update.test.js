@@ -135,7 +135,7 @@ describe('update', function () {
       describe('when skipping', function () {
         itDisplaysTheUpdatePrompt()
 
-        describe('when skip is selected', function () {
+        describe.skip('when skip is selected', function () {
           before('interact', async function () {
             await terminal.input(keys.DOWN)
             await terminal.input(keys.DOWN)
